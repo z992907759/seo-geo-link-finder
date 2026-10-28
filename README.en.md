@@ -1,66 +1,101 @@
-# SEO/GEO Link Finder & Email Outreach
+# SEO/GEO Link Finder
+
+**Find publishers. Reach the right inbox. Get the quote. Keep it all together.**
 
 [简体中文](README.md) | **English**
 
-An agent workflow for discovering backlink publishers, verifying public business contacts, preparing outreach emails, recording Gmail delivery state, tracking replies and quotes, and exporting results.
+Backlink outreach comes with a lot of legwork: searching for sites, digging up contact details, writing each email, then checking your inbox for replies.
 
-This is a standalone public copy of the original email outreach version from the project archived on October 19, 2026. It includes the workflow, scripts, tests, and example configuration. Historical client names embedded in code and the original sender name in test fixtures have been replaced or removed. The original archive remains local.
-
-## Features
-
-- Discover publishers and evaluate SEO / GEO quality, traffic, and cooperation evidence.
-- Find public business email addresses and check recipient roles and mail domains.
-- Generate personalized messages from verified facts; check signatures, prohibited disclosures, and duplicate copy.
-- Track sending, follow-ups, referrals, bounces, replies, quotes, and risk flags.
-- Manage ongoing outreach against volume and budget targets, and export prospect, contact, and quote worksheets.
-
-## Project structure
+This project puts those steps into one AI assistant workflow. Provide your website, target market, and budget, then confirm your sending identity and scope. The assistant can find publishers, send outreach, and organize replies so you can see who is interested, what they charge, and what their terms are.
 
 ```text
-SKILL.md         Agent workflow entry point and authorization boundaries
-agents/          Agent interface metadata
-assets/          Example campaign configuration without real accounts
-references/      Data contracts, qualification criteria, email style, and outreach rules
-scripts/         Research, copy generation, state management, and spreadsheet tools
-tests/           Python unit tests
+Your website + target market + budget
+                  ↓
+Find sites → Check quality → Find contacts → Email → Follow up
+                  ↓
+Publisher shortlist, quotes, placement terms, and contact history
 ```
 
-## Requirements and usage
+## What it takes off your plate
 
-Python 3.10+. The Python scripts use only the standard library. Tests do not require an email account or a paid API.
+- **Find sites with a reason to contact them.** Check topic fit, traffic thresholds, and cooperation opportunities. Keep source links so you can review the evidence.
+- **Check who handles partnerships.** Find public editorial, advertising, or business contacts and filter out unrelated recruiting and support inboxes.
+- **Write an email that fits each publisher.** Use verified sections and cooperation details to ask about price, link policy, and timing. Check signatures, repetitive copy, and prohibited client disclosures before sending.
+- **Turn replies into usable results.** Track quotes, free editorial opportunities, rejections, and bounces. Handle referrals to another contact, and stop follow-ups after a reply or opt-out.
+
+Built for people doing website SEO, international content partnerships, or publisher outreach for clients.
+
+## What you get back
+
+A list you can use to move a conversation forward:
+
+| Your question | What the results include |
+| --- | --- |
+| Why contact this site? | Topic fit, qualification evidence, and source links |
+| Where does the conversation stand? | Sent, awaiting reply, quoted, rejected, or bounced |
+| What does it cost? | Quoted price and currency, or a confirmed free editorial route |
+| What are the terms? | Link attributes, permanence, turnaround, and content requirements, where supplied |
+| What needs my judgment? | Missing terms, unusual replies, and risk flags |
+
+Keep results as JSON, or export to Excel when a compatible spreadsheet runtime is configured.
+
+## An example brief
+
+> Find industry publishers serving English-speaking markets for my website. Start with 30 suitable contacts, with a maximum budget of $100 per placement. Prepare the outreach emails for me to review, then send them after I confirm and collect the quotes that come back.
+
+The assistant checks your goals, mailbox, and signature before starting. The default is to prepare messages before sending. With explicit authorization, it can also send and follow up within the scope you agree on.
+
+**Live email requires an AI assistant environment connected to Gmail. Ongoing follow-ups also require scheduling support.** This repository supplies the Skill and supporting scripts; running Python alone will not send emails.
+
+## Get started
 
 ```bash
+git clone https://github.com/z992907759/seo-geo-link-finder.git
+cd seo-geo-link-finder
+
+# Run local tests without an email account or paid API
 python3 -m unittest discover -s tests -v
-python3 scripts/pipeline.py --help
-python3 scripts/outreach_state.py --help
-python3 scripts/compose_messages.py --help
-```
 
-Start a local campaign:
-
-```bash
+# Create your own campaign configuration
 mkdir -p campaigns/my-campaign
 cp assets/campaign-brief.example.json campaigns/my-campaign/campaign.json
 ```
 
-Edit the target website, markets, budget, and approved facts. Prepare input data according to `references/data-contract.md`. See [SKILL.md](SKILL.md) for the full workflow and qualification order.
+Requires **Python 3.10+**. The Python scripts use only the standard library. Set your website, markets, and budget in the configuration, then give [SKILL.md](SKILL.md) to an assistant that supports this workflow. Follow its steps to connect Gmail, confirm the sender identity, and prepare your data.
 
-### Email and automation
+To inspect a script entry point, run `python3 scripts/pipeline.py --help`. See the [data reference](references/data-contract.md) for input formats.
 
-The agent running this workflow sends and reads messages through connected Gmail tools. This repository does not include a standalone SMTP sender, Gmail OAuth client, or persistent scheduler. Running the Python scripts alone will not send emails. Live operation requires an agent environment with Gmail integration and scheduling, plus the mailbox identity, sender signature, and campaign authorization required by the workflow.
+<details>
+<summary>Optional setup: traffic data and Excel export</summary>
 
-The example configuration defaults to `send_paused`: it permits message preparation but does not authorize delivery. Confirm the mailbox, signature, sending scope, and follow-up settings before enabling `automatic_outreach`.
+### DataForSEO
 
-### Optional DataForSEO integration
+DataForSEO can supply website search and traffic estimates. Bring your own account; API calls may incur charges.
 
-For DataForSEO search or traffic estimates, configure the `DATAFORSEO_LOGIN` and `DATAFORSEO_PASSWORD` environment variables. On macOS, the password may also be read from the Keychain service `seo-geo-link-finder-dataforseo`, keyed by the API login. Supply your own account; API calls may incur charges. The scripts do not load `.env` files automatically.
+Set the `DATAFORSEO_LOGIN` and `DATAFORSEO_PASSWORD` environment variables. On macOS, the password can also be read from the Keychain service `seo-geo-link-finder-dataforseo`, keyed by the API login. The scripts do not load `.env` files automatically.
 
-### Excel export
+### Excel
 
-The `*.mjs` tools require Node.js and `@oai/artifact-tool`. The runtime must supply this dependency; it is not bundled here, and availability through public npm is not guaranteed. The Python workflow and JSON outputs can be used without it. Excel rendering and export require a compatible environment.
+The spreadsheet scripts require Node.js and a runtime that provides `@oai/artifact-tool`. This dependency is not bundled, and availability through public npm is not guaranteed. Without it, you can still use the Python scripts and JSON results.
 
-## Data and boundaries
+</details>
 
-Real client lists, mailbox identities, actual email content, Gmail message and thread IDs, historical quotes, and Excel exports are excluded from this public repository. `.gitignore` excludes campaign folders, output folders, credentials, and runtime artifacts.
+<details>
+<summary>Where is everything?</summary>
 
-The workflow collects cooperation replies and quotes. It does not purchase placements, promise payment, or accept contracts. Outreach must respect provider rules and recipient opt-out requests.
+| File / directory | Purpose |
+| --- | --- |
+| `SKILL.md` | Complete instructions for the assistant |
+| `assets/` | Example campaign configuration |
+| `scripts/` | Site qualification, email copy, reply tracking, and spreadsheet tools |
+| `references/` | Qualification rules, email style, and data formats |
+| `tests/` | Unit tests |
+| `agents/` | Assistant interface configuration |
+
+</details>
+
+## Keep your campaign data in your own workspace
+
+The public repository contains code, documentation, and examples. It does not include real client lists, mailbox accounts, email records, or historical quotes. `.gitignore` excludes campaign folders, output folders, common credentials, and campaign state files. Review new files before publishing your own changes.
+
+The assistant finds opportunities and collects replies and quotes. You decide which publisher to work with, whether to buy, and whether to accept terms. Respect email provider rules and recipient opt-out requests.
