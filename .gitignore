@@ -1,0 +1,34 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+token*.json
+
+# Private campaign data, mail state, and generated exports
+campaigns/
+outputs/
+private/
+campaign.json
+outreach_state.json
+outreach_messages*.json
+rolling_state.json
+*.xlsx
+*.xls
+*.csv
+*.tsv
+*.ndjson
+*.sqlite*
+*.db
+*.log
+
+# Runtime files
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.DS_Store
+.tmp*/

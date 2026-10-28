@@ -1,0 +1,6 @@
+interface:
+  display_name: "SEO/GEO 外链发现与自动外联"
+  short_description: "验证 Gmail 后自动找站、发信、收集回复报价并更新表格"
+  default_prompt: "使用 $seo-geo-link-finder 验证我的 Gmail，并为网站自动寻找外链资源、发送询价、跟踪回复和更新结果表。"
+policy:
+  allow_implicit_invocation: true
